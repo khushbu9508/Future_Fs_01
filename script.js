@@ -209,17 +209,17 @@ typeAcademic();
 
   const educationData = [
     {
-      img: "Btech.png",
+      img: "/assets/Btech.png",
       title: "Aditya College Of Engineering and Technology",
       desc: "2023 - 2027\nCurrently pursuing my B.Tech in Computer Science at Aditya College Of Engineering and Technology with a CGPA of 9.1 "
     },
     {
-      img: "12th.png",
+      img: "/assets/12th.png",
       title: "A.N COLLEGE, PATNA",
       desc: "2019 - 2021\n Successfully Completed my Higher Secondary Education from A.N College with a percentage of 76.2"
     },
     {
-      img: "10th.png",
+      img: "/assets/10th.png",
       title: "CPS Koilara Dawan Arrah(Bhojpur)",
       desc: "2018 - 2019\n Successfully Completed my Secondary School Education from CPS Koilara Dawan Arrah(Bhojpur)with a percentage of 88.19 "
     }
