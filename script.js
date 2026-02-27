@@ -45,66 +45,72 @@ document.addEventListener("DOMContentLoaded", function () {
 
   typeEffect();
 
-const sectionTitles = document.querySelectorAll(".section-title");
 
-function revealOnScroll() {
-  const triggerBottom = window.innerHeight * 0.85;
+  /* ================= SECTION TITLE REVEAL ================= */
 
-  sectionTitles.forEach(title => {
-    const titleTop = title.getBoundingClientRect().top;
+  const sectionTitles = document.querySelectorAll(".section-title");
 
-    if (titleTop < triggerBottom) {
-      title.classList.add("show");
-    } else {
-      title.classList.remove("show");   // 👈 THIS FIXES IT
-    }
-  });
-}
+  function revealOnScroll() {
+    const triggerBottom = window.innerHeight * 0.85;
 
-window.addEventListener("scroll", revealOnScroll);
-/* ================= ACADEMIC TYPING EFFECT ================= */
+    sectionTitles.forEach(title => {
+      const titleTop = title.getBoundingClientRect().top;
 
-const academicTexts = [
-  "B.Tech in Computer Science - Aditya College Of Engineering and Technology (2023-2027)",
-  "Higher Secondary - A.N College, Patna (2019-2021) - 76.2%",
-  "Secondary School - CPS Koilara Dawan Arrah(Bhojpur) (2018-2019) - 88.19%",
-  "Currently exploring ServiceNow & Full Stack Development"
-];
-
-let academicIndex = 0;
-let academicCharIndex = 0;
-let academicDeleting = false;
-
-const academicElement = document.querySelector(".academic-typing");
-
-function typeAcademic() {
-  if (!academicElement) return;
-
-  const currentText = academicTexts[academicIndex];
-
-  if (!academicDeleting) {
-    academicElement.textContent = currentText.substring(0, academicCharIndex + 1);
-    academicCharIndex++;
-
-    if (academicCharIndex === currentText.length) {
-      academicDeleting = true;
-      setTimeout(typeAcademic, 1500); // wait before deleting
-      return;
-    }
-  } else {
-    academicElement.textContent = currentText.substring(0, academicCharIndex - 1);
-    academicCharIndex--;
-
-    if (academicCharIndex === 0) {
-      academicDeleting = false;
-      academicIndex = (academicIndex + 1) % academicTexts.length;
-    }
+      if (titleTop < triggerBottom) {
+        title.classList.add("show");   // ✅ Only add, never remove
+      }
+    });
   }
 
-  setTimeout(typeAcademic, academicDeleting ? 50 : 100);
-}
+  window.addEventListener("scroll", revealOnScroll);
+  revealOnScroll(); // Run once on load
 
-typeAcademic();
+
+  /* ================= ACADEMIC TYPING EFFECT ================= */
+
+  const academicTexts = [
+    "B.Tech in Computer Science - Aditya College Of Engineering and Technology (2023-2027)",
+    "Higher Secondary - A.N College, Patna (2019-2021) - 76.2%",
+    "Secondary School - CPS Koilara Dawan Arrah (Bhojpur) (2018-2019) - 88.19%",
+    "Currently exploring ServiceNow & Full Stack Development"
+  ];
+
+  let academicIndex = 0;
+  let academicCharIndex = 0;
+  let academicDeleting = false;
+
+  const academicElement = document.querySelector(".academic-typing");
+
+  function typeAcademic() {
+    if (!academicElement) return;
+
+    const currentText = academicTexts[academicIndex];
+
+    if (!academicDeleting) {
+      academicElement.textContent = currentText.substring(0, academicCharIndex + 1);
+      academicCharIndex++;
+
+      if (academicCharIndex === currentText.length) {
+        academicDeleting = true;
+        setTimeout(typeAcademic, 1500);
+        return;
+      }
+    } else {
+      academicElement.textContent = currentText.substring(0, academicCharIndex - 1);
+      academicCharIndex--;
+
+      if (academicCharIndex === 0) {
+        academicDeleting = false;
+        academicIndex = (academicIndex + 1) % academicTexts.length;
+      }
+    }
+
+    setTimeout(typeAcademic, academicDeleting ? 50 : 100);
+  }
+
+  typeAcademic();
+
+
   /* ================= CONTACT FORM ================= */
 
   const form = document.getElementById("contactForm");
@@ -114,10 +120,11 @@ typeAcademic();
 
     const nameInput = document.getElementById("name");
 
-    // Remove numbers/special characters while typing
-    nameInput.addEventListener("input", function () {
-      this.value = this.value.replace(/[^A-Za-z\s]/g, "");
-    });
+    if (nameInput) {
+      nameInput.addEventListener("input", function () {
+        this.value = this.value.replace(/[^A-Za-z\s]/g, "");
+      });
+    }
 
     form.addEventListener("submit", async function (e) {
       e.preventDefault();
@@ -127,22 +134,20 @@ typeAcademic();
       const phone = document.getElementById("phone").value.trim();
       const message = document.getElementById("message").value.trim();
 
-      // Name validation
       const nameRegex = /^[A-Za-z\s]+$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const phoneRegex = /^[6-9]\d{9}$/;
+
       if (!nameRegex.test(name)) {
         showMessage("Full Name should contain only letters.");
         return;
       }
 
-      // Email validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         showMessage("Please enter a valid email address.");
         return;
       }
 
-      // Phone validation (Indian 10-digit)
-      const phoneRegex = /^[6-9]\d{9}$/;
       if (!phoneRegex.test(phone)) {
         showMessage("Enter valid 10-digit Indian phone number.");
         return;
@@ -154,16 +159,13 @@ typeAcademic();
       }
 
       try {
-        const response = await fetch(
-  "https://future-fs-01-f41d.onrender.com/contact",
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ name, email, phone, message })
-  }
-);
+        const response = await fetch("/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ name, email, phone, message })
+        });
 
         const data = await response.json();
 
@@ -201,7 +203,6 @@ typeAcademic();
   if (toggleBtn) {
     toggleBtn.addEventListener("click", () => {
       document.body.classList.toggle("light-mode");
-
       toggleBtn.textContent =
         document.body.classList.contains("light-mode") ? "☀️" : "🌙";
     });
@@ -214,17 +215,17 @@ typeAcademic();
     {
       img: "/assets/Btech.png",
       title: "Aditya College Of Engineering and Technology",
-      desc: "2023 - 2027\nCurrently pursuing my B.Tech in Computer Science at Aditya College Of Engineering and Technology with a CGPA of 9.1 "
+      desc: "2023 - 2027\nCurrently pursuing my B.Tech in Computer Science with a CGPA of 9.1"
     },
     {
       img: "/assets/12th.png",
-      title: "A.N COLLEGE, PATNA",
-      desc: "2019 - 2021\n Successfully Completed my Higher Secondary Education from A.N College with a percentage of 76.2"
+      title: "A.N College, Patna",
+      desc: "2019 - 2021\nHigher Secondary Education - 76.2%"
     },
     {
       img: "/assets/10th.png",
-      title: "CPS Koilara Dawan Arrah(Bhojpur)",
-      desc: "2018 - 2019\n Successfully Completed my Secondary School Education from CPS Koilara Dawan Arrah(Bhojpur)with a percentage of 88.19 "
+      title: "CPS Koilara Dawan Arrah (Bhojpur)",
+      desc: "2018 - 2019\nSecondary School Education - 88.19%"
     }
   ];
 
