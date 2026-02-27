@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Khushbu Portfolio</title>
+  <link rel="stylesheet" href="style1.css">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header>
+  <nav>
+    <div class="logo">
+      <img src="profile.png" alt="">
+      Khushbu
+    </div>
+
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#education">Academic</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#certifications">Certifications</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <!-- Dark Mode Button (Moved Outside UL) -->
+    <button id="themeToggle" class="theme-btn">🌙</button>
+  </nav>
+</header>
+
+
+<!-- ================= HERO ================= -->
+
+<section id="home" class="hero">
+  <div>
+    <img src="profile.png" class="hero-img" alt="Profile Image">
+    <h1>Hey👋 , I'm <span style="color:#14b8a6;">Khushbu Kumari</span></h1><br>
+    <h2><span class="typing"></span></h2>
+    <p class="home-desc">
+    Passionate about building scalable web applications and solving real-world problems using modern technologies.
+  </p>
+
+    <a href="#projects" class="btn">View My Work</a>
+
+    <a href="Resume.pdf" download class="btn" style="margin-left:10px;">
+      Download Resume
+    </a>
+  </div>
+</section>
+
+
+<!-- ================= ABOUT ================= -->
+
+<section id="about">
+  <h2 class="section-title">About Me</h2>
+  <p>
+    As a passionate learner and tech enthusiast, I specialize in <span class="highlight">Full Stack Web Development</span> while actively expanding my expertise in <span class="highlight">ServiceNow</span> to create workflow-driven, impactful solutions. With hands-on experience in MERN stack, automation, and real-world applications, I thrive on solving complex problems, optimizing processes, and delivering seamless digital experiences.
+
+Continuously exploring new tools and frameworks, I embrace every project as an opportunity to innovate, collaborate, and make a meaningful impact, blending technical skills with strategic thinking to create solutions that matter.
+  </p>
+</section>
+
+
+<!-- ================= EDUCATION ================= -->
+
+<section id="education">
+  <h2 class="section-title">Academic Journey</h2>
+
+  <div class="edu-wrapper">
+
+    <div class="edu-image">
+      <img src="Btech.png" id="eduImg" alt="Education Image">
+    </div>
+
+    <div class="edu-content">
+      <h3 id="eduTitle">B.Tech - Computer Science</h3>
+      <p id="eduDesc">
+        2022 - 2026<br>
+        Currently pursuing B.Tech in Computer Science.
+      </p>
+
+      <div class="edu-buttons">
+        <button onclick="prevEdu()">❮</button>
+        <button onclick="nextEdu()">❯</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================= SKILLS ================= -->
+
+<section id="skills">
+  <h2 class="section-title">Skills</h2>
+
+  <div class="skills-container">
+    <div class="skill-card"><i class="fab fa-html5"></i><span>HTML</span></div>
+    <div class="skill-card"><i class="fab fa-css3-alt"></i><span>CSS</span></div>
+    <div class="skill-card"><i class="fab fa-js"></i><span>JavaScript</span></div>
+    <div class="skill-card"><i class="fab fa-react"></i><span>React</span></div>
+    <div class="skill-card"><i class="fab fa-node-js"></i><span>Node</span></div>
+    <div class="skill-card"><i class="fas fa-cloud"></i><span>ServiceNow</span></div>
+    <div class="skill-card"><i class="fas fa-database"></i><span>SQL</span></div>
+    <div class="skill-card"><i class="fas fa-database"></i><span>MySQL</span></div>
+    <div class="skill-card"><i class="fab fa-git-alt"></i><span>Git</span></div>
+<div class="skill-card"><i class="fas fa-database"></i><span>MongoDB</span></div>  </div>
+</section>
+
+
+<!-- ================= PROJECTS ================= -->
+
+<section id="projects">
+  <h2 class="section-title">Projects</h2>
+
+  <div class="project-container">
+
+    <div class="project-card">
+      <h3>Sky-Pulse Weather App</h3>
+      <br>
+      <p>A responsive web app that provides real-time weather information for any city using the Skyulse API. Displays temperature, humidity, wind speed, sunrise and sunset times, and weather conditions with a clean, intuitive interface. Built with HTML, CSS, and JavaScript, leveraging API integration for dynamic data</p>
+      <a href="https://github.com/khushbu9508/skypulse-weather-app" target="_blank" class="btn">GitHub</a>
+      <a href="https://khushbu9508.github.io/skypulse-weather-app/" target="_blank" class="btn">Live Demo</a>
+    </div>
+
+    <div class="project-card">
+      <h3>Simon-game</h3>
+      <br>
+      <p>A classic Simon memory game built with HTML, CSS, and JavaScript. Players enter their name, and the game greets them with a personalized message using sound. The game increases in difficulty as the player advances through levels, testing memory and reaction skills in an interactive and fun interface</p>
+      <a href="https://github.com/khushbu9508/simon-game" target="_blank" class="btn">GitHub</a>
+      <a href="https://khushbu9508.github.io/simon-game/" target="_blank" class="btn">Live Demo</a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================= CERTIFICATIONS ================= -->
+
+<section id="certifications">
+  <h2 class="section-title">Certifications</h2>
+
+  <div class="cert-container">
+
+    <div class="cert-card">
+      <h3>Oracle Certified Foundations Associate – Database</h3>
+      <br>
+      <p>Recognized by Oracle University as Oracle Certified Foundations Associate in Database.</p>
+      <a href="oracle database certificate.pdf" target="_blank" class="btn">View Certificate</a>
+    </div>
+
+    <div class="cert-card">
+      <h3>IBM SkillsBuild Certification</h3>
+      <br>
+      <p>Getting Started with Artificial Intelligence – Earned January 2026"</p>
+      <a href="IBM.pdf" target="_blank" class="btn">View Certificate</a>
+    </div>
+
+    <div class="cert-card">
+      <h3>SimpliLearn SkillUp Certification</h3>
+      <br>
+      <p>Introduction to Frontend Development </p>
+      <a href="frontend.pdf" target="_blank" class="btn">View Certificate</a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ================= CONTACT ================= -->
+
+<section id="contact">
+  <h2 class="section-title">Contact Me</h2>
+
+  <form id="contactForm">
+
+    <!-- Full Name (Letters Only) -->
+    <input 
+      type="text" 
+      id="name" 
+      placeholder="Full Name"
+      pattern="[A-Za-z ]+"
+      title="Only letters are allowed"
+      required>
+
+    <!-- Email -->
+    <input 
+      type="email" 
+      id="email" 
+      placeholder="Email Address" 
+      required>
+
+    <!-- Phone (10 Digit Indian Only) -->
+    <input 
+      type="tel" 
+      id="phone" 
+      placeholder="Phone Number"
+      pattern="[6-9]{1}[0-9]{9}"
+      title="Enter valid 10-digit number"
+      maxlength="10"
+      required>
+
+    <!-- Message -->
+    <textarea 
+      id="message" 
+      rows="5" 
+      placeholder="Your Message" 
+      required></textarea>
+
+    <button type="submit" class="btn">Send Message</button>
+
+  </form>
+
+  <p id="successMessage" style="display:none; margin-top:15px;"></p>
+</section>
+
+
+<footer class="footer">
+  <div class="footer-content">
+    
+
+    <div class="social-icons">
+      <a href="https://www.linkedin.com/in/khushbu-kumari-480456291/" target="_blank">
+        <i class="fab fa-linkedin"></i>
+      </a>
+
+      <a href="https://github.com/khushbu9508" target="_blank">
+        <i class="fab fa-github"></i>
+      </a>
+
+      <a href="https://wa.me/919508128130" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+
+      <a href="mailto:Khushbusinghsk9508@gmail.com">
+        <i class="fas fa-envelope"></i>
+      </a>
+    </div>
+    <br><br>
+          <p><b>© 2026 Khushbu Kumari | All Rights Reserved</b></p>
+
+  </div>
+</footer>
+
+<script src="script1.js" defer></script>
+
+</body>
+</html>
