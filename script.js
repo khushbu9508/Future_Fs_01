@@ -154,13 +154,16 @@ typeAcademic();
       }
 
       try {
-        const response = await fetch("/contact", {   // ✅ FIXED HERE
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ name, email, phone, message })
-        });
+        const response = await fetch(
+  "https://future-fs-01-f41d.onrender.com/contact",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ name, email, phone, message })
+  }
+);
 
         const data = await response.json();
 
