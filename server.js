@@ -104,7 +104,7 @@ app.post("/contact", async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: "Message sent successfully!"
+      message: "✅ Your message has been sent successfully!"
     });
 
   } catch (error) {

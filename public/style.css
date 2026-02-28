@@ -672,3 +672,8 @@ button.btn {
   max-width: 600px;          /* optional: limit width for readability */
   line-height: 1.5;
 }
+#successMessage {
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 6px;
+}

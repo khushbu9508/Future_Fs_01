@@ -66,51 +66,6 @@ document.addEventListener("DOMContentLoaded", function () {
   revealOnScroll();
 
 
-  /* ================= ACADEMIC TYPING EFFECT ================= */
-
-  const academicTexts = [
-    "B.Tech in Computer Science - Aditya College Of Engineering and Technology (2023-2027)",
-    "Higher Secondary - A.N College, Patna (2019-2021) - 76.2%",
-    "Secondary School - CPS Koilara Dawan Arrah (Bhojpur) (2018-2019) - 88.19%",
-    "Currently exploring ServiceNow & Full Stack Development"
-  ];
-
-  let academicIndex = 0;
-  let academicCharIndex = 0;
-  let academicDeleting = false;
-
-  const academicElement = document.querySelector(".academic-typing");
-
-  function typeAcademic() {
-    if (!academicElement) return;
-
-    const currentText = academicTexts[academicIndex];
-
-    if (!academicDeleting) {
-      academicElement.textContent = currentText.substring(0, academicCharIndex + 1);
-      academicCharIndex++;
-
-      if (academicCharIndex === currentText.length) {
-        academicDeleting = true;
-        setTimeout(typeAcademic, 1500);
-        return;
-      }
-    } else {
-      academicElement.textContent = currentText.substring(0, academicCharIndex - 1);
-      academicCharIndex--;
-
-      if (academicCharIndex === 0) {
-        academicDeleting = false;
-        academicIndex = (academicIndex + 1) % academicTexts.length;
-      }
-    }
-
-    setTimeout(typeAcademic, academicDeleting ? 50 : 100);
-  }
-
-  typeAcademic();
-
-
   /* ================= CONTACT FORM ================= */
 
   const form = document.getElementById("contactForm");
@@ -164,18 +119,18 @@ document.addEventListener("DOMContentLoaded", function () {
           body: JSON.stringify({ name, email, phone, message })
         });
 
-        if (!response.ok) {
-          throw new Error("Server error");
+        const data = await response.json(); // ✅ Always read response
+
+        if (response.ok) {
+          showMessage(data.message || "✅ Your message has been sent successfully!", true);
+          form.reset();
+        } else {
+          showMessage(data.message || "❌ Something went wrong!");
         }
-
-        const data = await response.json();
-
-        showMessage(data.message || "Message sent successfully!", true);
-        form.reset();
 
       } catch (error) {
         console.error("Fetch Error:", error);
-        showMessage("Server error! Please try again.");
+        showMessage("❌ Server not responding. Please try again.");
       }
     });
   }
@@ -185,7 +140,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     successMessage.innerText = msg;
     successMessage.style.display = "block";
-    successMessage.style.color = isSuccess ? "#14b8a6" : "red";
+    successMessage.style.padding = "10px";
+    successMessage.style.borderRadius = "6px";
+    successMessage.style.fontWeight = "bold";
+
+    if (isSuccess) {
+      successMessage.style.color = "#14b8a6";
+    } else {
+      successMessage.style.color = "red";
+    }
 
     setTimeout(() => {
       successMessage.style.display = "none";
