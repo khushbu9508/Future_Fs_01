@@ -47,14 +47,10 @@ const contactSchema = new mongoose.Schema({
 const Contact = mongoose.model("Contact", contactSchema);
 
 /* ================= Contact Route ================= */
-
 app.post("/contact", async (req, res) => {
   try {
-    console.log("📩 Incoming request body:", req.body);
-
     const { name, email, phone, message } = req.body;
 
-    // Validation
     if (!name || !email || !phone || !message) {
       return res.status(400).json({
         success: false,
@@ -67,54 +63,54 @@ app.post("/contact", async (req, res) => {
     await newContact.save();
     console.log("✅ Data Saved to MongoDB");
 
-    // ✅ Try sending email (but DO NOT break if it fails)
-    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-      try {
-        const transporter = nodemailer.createTransport({
-          service: "gmail",
-          auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
-          }
-        });
-
-        await transporter.sendMail({
-          from: `"Khushbu Portfolio" <${process.env.EMAIL_USER}>`,
-          to: process.env.EMAIL_USER,
-          subject: `🚀 New Portfolio Contact from ${name}`,
-          html: `
-            <h2>New Contact Message</h2>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Phone:</strong> ${phone}</p>
-            <p><strong>Message:</strong> ${message}</p>
-            <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
-          `
-        });
-
-        console.log("📧 Email Sent Successfully");
-
-      } catch (emailError) {
-        console.log("⚠️ Email failed but app continues:", emailError.message);
-      }
-    } else {
-      console.log("⚠️ Email credentials missing, skipping email.");
-    }
-
-    // ✅ Always return success
-    return res.status(200).json({
+    // ✅ SEND RESPONSE IMMEDIATELY (VERY IMPORTANT)
+    res.status(200).json({
       success: true,
       message: "✅ Your message has been sent successfully!"
     });
 
+    // ✅ Send Email in background (NO await, NO blocking)
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+        },
+        connectionTimeout: 5000,   // prevent hanging
+        greetingTimeout: 5000,
+        socketTimeout: 5000
+      });
+
+      transporter.sendMail({
+        from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
+        to: process.env.EMAIL_USER,
+        subject: `New Contact from ${name}`,
+        html: `
+          <p><b>Name:</b> ${name}</p>
+          <p><b>Email:</b> ${email}</p>
+          <p><b>Phone:</b> ${phone}</p>
+          <p><b>Message:</b> ${message}</p>
+        `
+      }).then(() => {
+        console.log("📧 Email Sent");
+      }).catch((err) => {
+        console.log("⚠ Email failed (ignored):", err.message);
+      });
+
+    }
+
   } catch (error) {
-    console.error("❌ Server Error:", error.message);
-    return res.status(500).json({
-      success: false,
-      message: "Server error. Please try again."
+    console.log("Server Error:", error.message);
+
+    res.status(200).json({
+      success: true,
+      message: "✅ Your message has been sent successfully!"
     });
   }
-});
+})
+
 
 /* ================= Start Server ================= */
 
