@@ -56,62 +56,62 @@ app.post("/contact", async (req, res) => {
 
     // Validation
     if (!name || !email || !phone || !message) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required"
+      });
     }
 
-    // Save to MongoDB
+    // ✅ Save to MongoDB
     const newContact = new Contact({ name, email, phone, message });
     await newContact.save();
     console.log("✅ Data Saved to MongoDB");
 
-    // Check Email ENV
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      console.log("❌ EMAIL_USER or EMAIL_PASS missing");
-      return res.status(500).json({ message: "Email configuration error" });
+    // ✅ Try sending email (but DO NOT break if it fails)
+    if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+      try {
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS
+          }
+        });
+
+        await transporter.sendMail({
+          from: `"Khushbu Portfolio" <${process.env.EMAIL_USER}>`,
+          to: process.env.EMAIL_USER,
+          subject: `🚀 New Portfolio Contact from ${name}`,
+          html: `
+            <h2>New Contact Message</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Phone:</strong> ${phone}</p>
+            <p><strong>Message:</strong> ${message}</p>
+            <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
+          `
+        });
+
+        console.log("📧 Email Sent Successfully");
+
+      } catch (emailError) {
+        console.log("⚠️ Email failed but app continues:", emailError.message);
+      }
+    } else {
+      console.log("⚠️ Email credentials missing, skipping email.");
     }
 
-    // Email Transporter (More Reliable Config)
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 587,
-      secure: false,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    });
-
-    // Verify transporter
-    await transporter.verify();
-    console.log("✅ Email server ready");
-
-    // Send Email
-    await transporter.sendMail({
-      from: `"Khushbu Portfolio" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER,
-      subject: `🚀 New Portfolio Contact from ${name}`,
-      html: `
-        <h2>New Contact Message</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Message:</strong> ${message}</p>
-        <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
-      `
-    });
-
-    console.log("📧 Email Sent Successfully");
-
+    // ✅ Always return success
     return res.status(200).json({
       success: true,
       message: "✅ Your message has been sent successfully!"
     });
 
   } catch (error) {
-    console.error("❌ Server Error:", error);
+    console.error("❌ Server Error:", error.message);
     return res.status(500).json({
       success: false,
-      message: error.message
+      message: "Server error. Please try again."
     });
   }
 });
