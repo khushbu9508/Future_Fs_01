@@ -57,13 +57,13 @@ document.addEventListener("DOMContentLoaded", function () {
       const titleTop = title.getBoundingClientRect().top;
 
       if (titleTop < triggerBottom) {
-        title.classList.add("show");   // ✅ Only add, never remove
+        title.classList.add("show");
       }
     });
   }
 
   window.addEventListener("scroll", revealOnScroll);
-  revealOnScroll(); // Run once on load
+  revealOnScroll();
 
 
   /* ================= ACADEMIC TYPING EFFECT ================= */
@@ -139,26 +139,23 @@ document.addEventListener("DOMContentLoaded", function () {
       const phoneRegex = /^[6-9]\d{9}$/;
 
       if (!nameRegex.test(name)) {
-        showMessage("Full Name should contain only letters.");
-        return;
+        return showMessage("Full Name should contain only letters.");
       }
 
       if (!emailRegex.test(email)) {
-        showMessage("Please enter a valid email address.");
-        return;
+        return showMessage("Please enter a valid email address.");
       }
 
       if (!phoneRegex.test(phone)) {
-        showMessage("Enter valid 10-digit Indian phone number.");
-        return;
+        return showMessage("Enter valid 10-digit Indian phone number.");
       }
 
       if (!message) {
-        showMessage("Message cannot be empty.");
-        return;
+        return showMessage("Message cannot be empty.");
       }
 
       try {
+
         const response = await fetch("/contact", {
           method: "POST",
           headers: {
@@ -167,14 +164,14 @@ document.addEventListener("DOMContentLoaded", function () {
           body: JSON.stringify({ name, email, phone, message })
         });
 
+        if (!response.ok) {
+          throw new Error("Server error");
+        }
+
         const data = await response.json();
 
-        if (response.ok) {
-          showMessage(data.message, true);
-          form.reset();
-        } else {
-          showMessage(data.message);
-        }
+        showMessage(data.message || "Message sent successfully!", true);
+        form.reset();
 
       } catch (error) {
         console.error("Fetch Error:", error);
@@ -215,17 +212,17 @@ document.addEventListener("DOMContentLoaded", function () {
     {
       img: "assets/Btech.png",
       title: "Aditya College Of Engineering and Technology",
-      desc: "2023 - 2027\nCurrently pursuing my B.Tech in Computer Science with a CGPA of 9.1"
+      desc: "2023 - 2027<br>Currently pursuing B.Tech in Computer Science with CGPA 9.1"
     },
     {
       img: "assets/12th.png",
       title: "A.N College, Patna",
-      desc: "2019 - 2021\nHigher Secondary Education - 76.2%"
+      desc: "2019 - 2021<br>Higher Secondary Education - 76.2%"
     },
     {
       img: "assets/10th.png",
       title: "CPS Koilara Dawan Arrah (Bhojpur)",
-      desc: "2018 - 2019\nSecondary School Education - 88.19%"
+      desc: "2018 - 2019<br>Secondary School Education - 88.19%"
     }
   ];
 
@@ -240,7 +237,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     img.src = educationData[eduIndex].img;
     title.textContent = educationData[eduIndex].title;
-    desc.innerHTML = educationData[eduIndex].desc.replace("\n", "<br>");
+    desc.innerHTML = educationData[eduIndex].desc;
   }
 
   window.nextEdu = function () {
