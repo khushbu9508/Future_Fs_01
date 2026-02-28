@@ -3,7 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const nodemailer = require("nodemailer");
 const cors = require("cors");
-const path = require("path");
+
 
 const app = express();
 
@@ -13,11 +13,11 @@ app.use(cors());
 app.use(express.json());
 
 // Serve static files from public folder
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static("public"));
 
 // Serve index.html on root
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
+  res.sendFile(__dirname + "/public/index.html");
 });
 
 
