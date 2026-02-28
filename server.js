@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 // Serve frontend folder
-app.use(express.static(path.join(__dirname, "..")));
+app.use(express.static(path.join(__dirname, "public")));
 
 
 /* ================= MongoDB Connection ================= */

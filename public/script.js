@@ -213,17 +213,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const educationData = [
     {
-      img: "/assets/Btech.png",
+      img: "assets/Btech.png",
       title: "Aditya College Of Engineering and Technology",
       desc: "2023 - 2027\nCurrently pursuing my B.Tech in Computer Science with a CGPA of 9.1"
     },
     {
-      img: "/assets/12th.png",
+      img: "assets/12th.png",
       title: "A.N College, Patna",
       desc: "2019 - 2021\nHigher Secondary Education - 76.2%"
     },
     {
-      img: "/assets/10th.png",
+      img: "assets/10th.png",
       title: "CPS Koilara Dawan Arrah (Bhojpur)",
       desc: "2018 - 2019\nSecondary School Education - 88.19%"
     }
