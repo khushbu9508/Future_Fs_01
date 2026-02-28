@@ -12,19 +12,27 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve frontend folder
+// Serve static files from public folder
 app.use(express.static(path.join(__dirname, "public")));
+
+// Serve index.html on root
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 
 /* ================= MongoDB Connection ================= */
 
 if (!process.env.MONGO_URI) {
-  console.log("❌ MONGO_URI is missing in .env file");
+  console.log("❌ MONGO_URI is missing in Render Environment Variables");
 }
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB Atlas Connected"))
-  .catch((err) => console.log("❌ MongoDB Error:", err));
+  .catch((err) => {
+    console.log("❌ MongoDB Error:", err);
+    process.exit(1); // Stop app if DB fails
+  });
 
 
 /* ================= Schema ================= */
@@ -45,31 +53,24 @@ const Contact = mongoose.model("Contact", contactSchema);
 app.post("/contact", async (req, res) => {
   try {
 
-    console.log("📩 Received Data:", req.body);
-
     const { name, email, phone, message } = req.body;
 
     if (!name || !email || !phone || !message) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    /* ===== Save to MongoDB ===== */
-
+    // Save to MongoDB
     const newContact = new Contact({ name, email, phone, message });
     await newContact.save();
     console.log("✅ Data Saved to MongoDB");
 
-
-    /* ===== Check Email ENV ===== */
-
+    // Check Email ENV
     if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      console.log("❌ EMAIL_USER or EMAIL_PASS missing in .env");
+      console.log("❌ EMAIL_USER or EMAIL_PASS missing in Render");
       return res.status(500).json({ message: "Email configuration error" });
     }
 
-
-    /* ===== Email Transporter ===== */
-
+    // Email Transporter
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
@@ -78,69 +79,18 @@ app.post("/contact", async (req, res) => {
       }
     });
 
-
-    /* ===== Send Email ===== */
-
+    // Send Email
     await transporter.sendMail({
       from: `"Khushbu Portfolio" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
       subject: `🚀 New Portfolio Contact from ${name}`,
       html: `
-      <div style="margin:0; padding:0; background-color:#f3f4f6; font-family:Segoe UI, Arial, sans-serif;">
-        <table width="100%" cellpadding="0" cellspacing="0" style="padding:30px 0;">
-          <tr>
-            <td align="center">
-              <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 8px 20px rgba(0,0,0,0.08);">
-
-                <!-- Header -->
-                <tr>
-                  <td style="background:#14b8a6; padding:25px; text-align:center;">
-                    <h1 style="color:#ffffff; margin:0; font-size:22px;">
-                      🚀 New Portfolio Contact Request
-                    </h1>
-                  </td>
-                </tr>
-
-                <!-- Body -->
-                <tr>
-                  <td style="padding:30px; color:#333;">
-                    <p style="font-size:16px;">Hello Khushbu 👋,</p>
-                    <p style="font-size:15px; line-height:1.6;">
-                      You have received a new message from your portfolio website.
-                    </p>
-
-                    <hr style="margin:25px 0; border:none; border-top:1px solid #eee;">
-
-                    <p><strong>👤 Name:</strong> ${name}</p>
-                    <p><strong>📧 Email:</strong> ${email}</p>
-                    <p><strong>📱 Phone:</strong> ${phone}</p>
-
-                    <div style="margin-top:20px;">
-                      <strong>💬 Message:</strong>
-                      <div style="margin-top:10px; padding:18px; background:#f1f5f9; border-left:4px solid #14b8a6; border-radius:8px;">
-                        ${message}
-                      </div>
-                    </div>
-
-                    <p style="margin-top:30px; font-size:13px; color:#666;">
-                      📅 Received on: ${new Date().toLocaleString()}
-                    </p>
-                  </td>
-                </tr>
-
-                <!-- Footer -->
-                <tr>
-                  <td style="background:#f9fafb; padding:20px; text-align:center; font-size:12px; color:#888;">
-                    © ${new Date().getFullYear()} Khushbu Portfolio <br>
-                    Built with ❤️ using Node.js & MongoDB
-                  </td>
-                </tr>
-
-              </table>
-            </td>
-          </tr>
-        </table>
-      </div>
+        <h2>New Contact Message</h2>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Message:</strong> ${message}</p>
+        <p><strong>Date:</strong> ${new Date().toLocaleString()}</p>
       `
     });
 
